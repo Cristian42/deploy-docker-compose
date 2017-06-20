@@ -12,7 +12,4 @@ RUN pip install -r requirements.txt
 
 ADD . /code/
 
-EXPOSE 8000
-
-CMD ["gunicorn", "web.wsgi", "--bind=0.0.0.0:8000"]
 
