@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import random
+import string
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'i(u477*$qv-0z5irm9(0qq82%^7%=2ie7ztxc^#c=teu2*fm4-'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY") if os.getenv("DJANGO_SECRET_KEY") else ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(50))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS").split(":") if os.getenv("DJANGO_ALLOWED_HOSTS") else []
 
 
 # Application definition
@@ -75,8 +77,12 @@ WSGI_APPLICATION = 'web.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    'NAME': os.getenv("DJANGO_DB_NAME", ""),
+        'ENGINE': 'django.db.backends.mysql',
+    'USER': os.getenv("DJANGO_DB_USER", ""),
+    'PASSWORD': os.getenv("DJANGO_DB_PASSWORD", ""),
+    'HOST': os.getenv("DJANGO_DB_HOST", ""),
+    'PORT': '3306'
     }
 }
 
