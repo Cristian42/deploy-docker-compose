@@ -21,6 +21,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
+
+### Retrieve config from the environment ###
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY") if os.getenv("DJANGO_SECRET_KEY") else ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(50))
 
@@ -28,6 +31,12 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY") if os.getenv("DJANGO_SECRET_KEY") el
 DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS").split(":") if os.getenv("DJANGO_ALLOWED_HOSTS") else []
+
+DB_NAME = os.getenv("DJANGO_DB_NAME", "")
+DB_USER = os.getenv("DJANGO_DB_USER", "")
+DB_PASSWORD = os.getenv("DJANGO_DB_PASSWORD", "") 
+DB_HOST = os.getenv("DJANGO_DB_HOST", "")
+
 
 
 # Application definition
@@ -77,15 +86,14 @@ WSGI_APPLICATION = 'web.wsgi.application'
 
 DATABASES = {
     'default': {
-    'NAME': os.getenv("DJANGO_DB_NAME", ""),
+    'NAME': DB_NAME,
         'ENGINE': 'django.db.backends.mysql',
-    'USER': os.getenv("DJANGO_DB_USER", ""),
-    'PASSWORD': os.getenv("DJANGO_DB_PASSWORD", ""),
-    'HOST': os.getenv("DJANGO_DB_HOST", ""),
+    'USER': DB_USER,
+    'PASSWORD': DB_PASSWORD,
+    'HOST': DB_HOST,
     'PORT': '3306'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
